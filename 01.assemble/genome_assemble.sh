@@ -15,7 +15,7 @@ verkko -d ./ --hifi J2055A.hifi.fastq.gz --nano ONT.50k.fq.gz --hic1 J2055A_S579
 nextDenovo run.cfg
 
 
-#hic
+#3ddna
 cd references
 bwa index J2055A.hifi.p_ctg.fa
 python /public/home/weichuanzheng/software/hic/juicer-1.6/misc/generate_site_positions.py MboI genome J2055A.hifi.p_ctg.fa
@@ -29,7 +29,7 @@ cp genome.chrom.sizes /public/home/weichuanzheng/project/15.J2055A/08.hic/restri
 -s MboI \
 -t 32
 
-#all hic
+#allhic
 bwa index -a bwtsw J2055A.hifi.p_ctg.fa
 samtools faidx J2055A.hifi.p_ctg.fa
 bwa aln -t 128 J2055A.hifi.p_ctg.fa J2055A_S545_R1.fastq.gz > sample_R1.sai
@@ -42,3 +42,17 @@ ALLHiC_partition -b sample.clean.bam -r J2055A.hifi.p_ctg.fa -e GATC -k 10
 allhic extract sample.clean.bam J2055A.hifi.p_ctg.fa --RE GATC
 allhic optimize sample.clean.counts_GATC.10g1.txt sample.clean.clm #1-10
 ALLHiC_plot -b sample.clean.bam -a groups.agp -l chrn.list -s 50k -o heatmap-pdf_50k
+
+#quickly visualize tools for collinearity between two genomes
+#NGenomeSyn (use nucmer to align)
+perl GetTwoGenomeSyn.pl -NumThreads 48 -InGenomeA j1055a.v3.fasta -InGenomeB Sbicolor_313_v3.0.fa -OutPrefix v3_ref -BinDir /public/home/weichuanzheng/software/mummer/bin
+
+#Raw reads mapping and depth statistics
+minimap2 -t 96 -a j1055a.v3.fasta J2055A.fastq > hifi.sam
+samtools view -@ 64 -bS hifi.sam | samtools sort -@ 64 - -o hifi.bam
+samtools index hifi.bam
+rm hifi.sam
+pandepth -i hifi.bam -w 500 -t 36 -o hifi_500
+pandepth -i hifi.bam -w 1000 -t 36 -o hifi_1000
+pandepth -i hifi.bam -w 1 -t 36 -o hifi_1
+samtools flagstat -@ 32 hifi.bam > hifi.stat
