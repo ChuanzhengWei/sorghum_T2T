@@ -28,6 +28,11 @@ cp genome.chrom.sizes /public/home/weichuanzheng/project/15.J2055A/08.hic/restri
 -z /public/home/weichuanzheng/project/15.J2055A/08.hic/references/J2055A.hifi.p_ctg.fa \
 -s MboI \
 -t 32
+run-asm-pipeline.sh -r 0 J2055A.hifi.p_ctg.fa merged_nodups.txt
+run-asm-pipeline-post-review.sh \
+    --sort-output \
+    -r asm.hion.rawchrom.review.assembly J2055A.hifi.p_ctg.fa merged_nodups.txt
+
 
 #allhic
 bwa index -a bwtsw J2055A.hifi.p_ctg.fa
@@ -45,7 +50,7 @@ ALLHiC_plot -b sample.clean.bam -a groups.agp -l chrn.list -s 50k -o heatmap-pdf
 
 #quickly visualize tools for collinearity between two genomes
 #NGenomeSyn (use nucmer to align)
-perl GetTwoGenomeSyn.pl -NumThreads 48 -InGenomeA j1055a.v3.fasta -InGenomeB Sbicolor_313_v3.0.fa -OutPrefix v3_ref -BinDir /public/home/weichuanzheng/software/mummer/bin
+perl GetTwoGenomeSyn.pl -NumThreads 48 -InGenomeA j2055a.v3.fasta -InGenomeB Sbicolor_313_v3.0.fa -OutPrefix v3_ref -BinDir /public/home/weichuanzheng/software/mummer/bin
 
 #Raw reads mapping and depth statistics
 minimap2 -t 96 -a j1055a.v3.fasta J2055A.fastq > hifi.sam
