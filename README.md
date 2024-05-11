@@ -12,4 +12,7 @@ and subsequently, I performed two rounds of updates using **PASA**.
 This version of the gff3 file includes more gene models than either BTx623-v3 or BTx623-v5. I will keep refining this annotation file and update it in a timely manner.
 I continue to see potential for optimization in this annotation, particularly concerning the length issues of UTRs, and I strongly suggest further validation with RNA-seq data before related analyses.
 
+The gene names in BTx623-v3 and BTx623-v5 are identical; however, the gene names in the gff3 file I uploaded do not match those in the annotation files for versions v3/v5. 
+To prevent this misunderstanding, I have deposited the relationship between the amino acid sequences of the BTx623-T2T transcripts and those of the longest transcripts of v3/v5 on figshare.
+
 Should you wish to learn more about optimizing annotation details, or if any issues arise during use, feel free to contact me at weichuanzheng1202@163.com at any time.
